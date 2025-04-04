@@ -1,9 +1,8 @@
-use std::cell::RefCell;
-use std::rc::Rc;
+use std::sync::Arc;
 use wgpu::{Device, PowerPreference, Queue, Surface};
 use winit::dpi::PhysicalSize;
-use winit::window::{Window, WindowAttributes};
-use crate::window::screen::Screen;
+use winit::window::Window;
+use pollster::block_on;
 
 pub struct WindowState<'window>{
     surface : Surface<'window>,
@@ -11,13 +10,12 @@ pub struct WindowState<'window>{
     queue   : Queue,
     config  : wgpu::SurfaceConfiguration,
     size    : PhysicalSize<u32>,
-    window : &'window Window,
 }
 
 impl<'window> WindowState<'window>{
 
     // Create A new Window used for WGPU applications
-    pub async fn new(window : &'window Window) -> WindowState<'window>{
+    pub fn new(window : Arc<Window>) -> WindowState<'window>{
 
         let instance = wgpu::Instance::new(
             &wgpu::InstanceDescriptor{
@@ -28,29 +26,30 @@ impl<'window> WindowState<'window>{
         let size = window
             .inner_size();
 
-        let surface = unsafe {
+        let surface =
             instance.create_surface(
-                window
-            ).unwrap()
-        };
+                Arc::clone(&window)
+            ).unwrap();
 
-        let adapter = instance.request_adapter(
-            &wgpu::RequestAdapterOptionsBase{
-                power_preference: PowerPreference::HighPerformance,
-                force_fallback_adapter: false,
-                compatible_surface: Some(&surface),
-            }
-        ).await.unwrap();
+        let (device, queue, adapter) = block_on( async {
+            let adapter = instance.request_adapter(
+                &wgpu::RequestAdapterOptionsBase {
+                    power_preference: PowerPreference::HighPerformance,
+                    force_fallback_adapter: false,
+                    compatible_surface: Some(&surface),
+                }).await.unwrap();
 
-        let (device, queue) = adapter.request_device(
-            &wgpu::DeviceDescriptor{
-                label: None,
-                required_features: Default::default(),
-                required_limits: Default::default(),
-                memory_hints: Default::default(),
-            },
-            None
-        ).await.unwrap();
+            let (device, queue) = adapter.request_device(
+                &wgpu::DeviceDescriptor {
+                    label: None,
+                    required_features: Default::default(),
+                    required_limits: Default::default(),
+                    memory_hints: Default::default(),
+                },
+                None
+            ).await.unwrap();
+            (device, queue, adapter)
+        });
 
         let surface_caps = surface.get_capabilities(&adapter);
         let surface_format = surface_caps.formats.iter()
@@ -75,12 +74,6 @@ impl<'window> WindowState<'window>{
             queue,
             config,
             size,
-            window
         }
     }
-
-    pub fn get_window(&mut self) -> &'window Window{
-        &self.window
-    }
-
 }

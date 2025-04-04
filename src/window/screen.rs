@@ -1,35 +1,36 @@
+use std::sync::Arc;
+use crate::window::screen_events::escape_pressed;
 use winit::application::ApplicationHandler;
 use winit::event::WindowEvent;
 use winit::event_loop::ActiveEventLoop;
 use winit::window::{Window, WindowAttributes, WindowId};
-use crate::window::screen_events::escape_pressed;
+use crate::window::screen_state::WindowState;
 
-#[derive(Debug)]
-pub struct Screen {
+pub struct Screen<'window> {
     window_attributes: WindowAttributes,
-    window: Option<Window>,
+    window: Option<Arc<Window>>,
+    state: Option<WindowState<'window>>
 }
 
-impl Screen {
+impl<'window> Screen<'window> {
     pub fn new(title : &str) -> Screen{
         Screen {
             window_attributes: Window::default_attributes()
                 .with_title(title),
             window: None,
+            state : None
         }
     }
 
-    pub fn get_window(&mut self) -> &mut Window {
-        self.window.as_mut().unwrap()
-    }
 }
-impl ApplicationHandler for Screen {
+impl<'window> ApplicationHandler for Screen<'window> {
     fn resumed(&mut self, event_loop: &ActiveEventLoop) {
-        let window = event_loop.create_window(self.window_attributes.clone()).unwrap();
-        self.window = Some(window);
+        let window = Arc::new(event_loop.create_window(self.window_attributes.clone()).unwrap());
+        self.window = Some(window.clone());
+        self.state = Some(WindowState::new(window.clone()));
     }
 
-    fn window_event(&mut self, event_loop: &ActiveEventLoop, window_id: WindowId, event: WindowEvent) {
+    fn window_event(&mut self, event_loop: &ActiveEventLoop, _: WindowId, event: WindowEvent) {
         match &event {
             WindowEvent::CloseRequested => event_loop.exit(),
 
