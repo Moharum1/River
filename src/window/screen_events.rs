@@ -1,13 +1,11 @@
-use winit::event::{ElementState, KeyEvent};
-use winit::keyboard::{KeyCode, PhysicalKey};
+use glfw::{Action, Key, WindowEvent};
 
-pub fn escape_pressed(event: &KeyEvent) -> bool {
+// use winit::event::{ElementState, KeyEvent};
+// use winit::keyboard::{KeyCode, PhysicalKey};
+//
+pub fn escape_pressed(event: &WindowEvent) -> bool {
     matches!(
         event,
-        KeyEvent {
-            state: ElementState::Pressed,
-            physical_key: PhysicalKey::Code(KeyCode::Escape),
-            ..
-        }
+        WindowEvent::Key(Key::Escape, _, Action::Press, _)
     )
 }
