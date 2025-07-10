@@ -3,7 +3,7 @@ use std::ops::{Add, Div, Mul, Neg, Sub};
 use num_traits::real::Real;
 use num_traits::Signed;
 
-#[derive(Debug, Clone, Copy, Default)]
+#[derive(Debug, Clone, Copy, Default, PartialEq)]
 pub(crate) struct Vector2<T>{
     pub x: T,
     pub y: T,
@@ -35,7 +35,7 @@ impl<T> Vector2<T> where T: Signed + Clone + Real{
         self.dot(rhs).abs()
     }
 
-    fn length(&self) -> T{
+    pub(crate) fn length(&self) -> T{
         self.x.clone() * self.x.clone() + self.y.clone() * self.y.clone()
     }
 
@@ -185,7 +185,7 @@ impl<T> Vector3<T> where T: Signed + Clone + Real{
         (v2, v3)
     }
 
-    fn length(&self) -> T{
+    pub(crate) fn length(&self) -> T{
         self.x.clone() * self.x.clone() + self.y.clone() * self.y.clone() + self.z.clone() * self.z.clone()
     }
 

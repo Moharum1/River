@@ -1,11 +1,3 @@
-use crate::engine::lights::GeneralLight;
-use crate::engine::math::{Camera, Integrator};
-use crate::engine::primitives::GeneralPrimitive;
-use crate::engine::samplers::SamplerIntegrator;
-use crate::engine::{Ray, Scene};
-use crate::engine::math::Normal::Normal3f;
-
-
 // An Integrator based on Whitted's ray tracing Alg
 // Very accuracte in computing reflected and transmitted light from
 // Specular objects like glass, mirrors and water
