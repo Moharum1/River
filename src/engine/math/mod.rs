@@ -2,7 +2,7 @@ mod WhittedIntegrator;
 mod Normal;
 mod Vector;
 mod Point;
-mod rays;
+pub mod rays;
 
 use crate::engine::lights::GeneralLight;
 use crate::engine::primitives::GeneralPrimitive;

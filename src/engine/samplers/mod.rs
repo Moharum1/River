@@ -1,7 +1,8 @@
 use crate::engine::lights::GeneralLight;
 use crate::engine::math::Camera;
+use crate::engine::math::rays::Ray::Ray;
 use crate::engine::primitives::GeneralPrimitive;
-use crate::engine::{Bound2i, Point2i, Ray, Scene};
+use crate::engine::Scene;
 
 pub trait SamplerIntegrator : crate::engine::math::Integrator {
     fn render(&self, scene: &Scene<GeneralPrimitive, GeneralLight>){

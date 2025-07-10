@@ -1,5 +1,6 @@
 use crate::engine::primitives::Primitive;
 use crate::engine::lights::Light;
+use crate::engine::math::rays::Ray::Ray;
 
 mod math;
 mod samplers;
@@ -7,12 +8,6 @@ mod lights;
 mod primitives;
 
 // Primitive Describe a Shape Geometry and it's Material
-
-
-
-struct Ray{
-
-}
 
 struct SurfaceInteraction{
 

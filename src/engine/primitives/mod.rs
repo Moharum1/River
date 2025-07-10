@@ -1,4 +1,5 @@
-use crate::engine::{Bound3f, Ray, SurfaceInteraction};
+use crate::engine::{Bound3f, SurfaceInteraction};
+use crate::engine::math::rays::Ray::Ray;
 
 pub(crate) trait Primitive{
 

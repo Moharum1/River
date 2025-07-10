@@ -3,9 +3,7 @@ use crate::engine::math::rays::{BaseRay, Medium};
 use crate::engine::math::Vector::Vector3f;
 
 
-
-
-struct Ray{
+pub(crate) struct Ray{
     origin: Point3f,
     direction: Vector3f,
     t_max : f32,

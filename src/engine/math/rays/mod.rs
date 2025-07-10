@@ -1,7 +1,7 @@
 use crate::engine::math::Point::Point3f;
 use crate::engine::math::Vector::Vector3f;
 
-mod Ray;
+pub mod Ray;
 mod ray_differential;
 
 struct Medium{
@@ -10,7 +10,7 @@ struct Medium{
 
 
 trait BaseRay{
-    fn new(origin : Point3f, direction : Vector3f, t_max : f32, time : f32, medium: Option<crate::engine::math::rays::Ray::Medium>) -> Ray;
+    fn new(origin : Point3f, direction : Vector3f, t_max : f32, time : f32, medium: Option<Medium>) -> Self;
 
     fn get_origin(&self) -> Point3f;
 
