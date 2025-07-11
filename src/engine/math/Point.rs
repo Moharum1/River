@@ -11,7 +11,7 @@ pub(crate) struct Point2<T>{
     pub x: T,
     pub y: T,
 }
-impl<T> Point2<T> where T: Signed + Clone + Real{
+impl<T> Point2<T> where T: Copy + Signed + Clone + Real{
     pub fn new(x: T, y: T) -> Self{
         Self{x, y}
     }
@@ -34,7 +34,7 @@ impl<T> Point2<T> where T: Signed + Clone + Real{
         }
     }
 
-    fn distance(&self, p2 : Point2<T>) -> T{
+    pub(crate) fn distance(&self, p2 : Point2<T>) -> T{
         Vector2{
             x: self.x - p2.x,
             y: self.y - p2.y,
@@ -113,6 +113,17 @@ impl<T> Add<Vector2<T>> for Point2<T> where T: Add<Output = T>{
     }
 }
 
+impl<T> Add<Point2<T>> for Point2<T> where T: Add<Output = T>{
+    type Output = Point2<T>;
+
+    fn add(self, rhs: Point2<T>) -> Self::Output {
+        Self{
+            x: self.x + rhs.x,
+            y: self.y + rhs.y,
+        }
+    }
+}
+
 impl<T> Sub<Point2<T>> for Point2<T> where T: Sub<Output = T>{
     type Output = Vector2<T>;
 
@@ -132,10 +143,10 @@ impl<T> Sub<Vector2<T>> for Point2<T> where T: Sub<Output = T>{
     }
 }
 
-impl<T> Mul<f32> for Point2<T> where T: Mul<f32, Output = T>{
+impl<T> Mul<T> for Point2<T> where T: Mul<Output = T> + Copy{
     type Output = Point2<T>;
 
-    fn mul(self, rhs: f32) -> Self::Output {
+    fn mul(self, rhs: T) -> Self::Output {
         Self{
             x: self.x * rhs,
             y: self.y * rhs,
@@ -190,7 +201,7 @@ impl<T> Point3<T> where T: Signed + Clone + Real{
         self.length().sqrt()
     }
 
-    fn distance(&self, p2 : Point3<T>) -> T{
+    pub(crate) fn distance(&self, p2 : Point3<T>) -> T{
         Vector3{
             x: self.x - p2.x,
             y: self.y - p2.y,
@@ -219,7 +230,7 @@ impl<T> Point3<T> where T: Signed + Clone + Real{
         self.x.max(self.y.max(self.z))
     }
 
-    pub fn max(&self, rhs : Point3<T>) -> Point3<T> {
+    pub fn max(&self, rhs : &Point3<T>) -> Point3<T> {
         Self{
             x: self.x.max(rhs.x),
             y: self.y.max(rhs.y),
@@ -227,7 +238,7 @@ impl<T> Point3<T> where T: Signed + Clone + Real{
         }
     }
 
-    pub fn min(&self, rhs : Point3<T>) -> Point3<T>{
+    pub fn min(&self, rhs : &Point3<T>) -> Point3<T>{
         Self{
             x: self.x.min(rhs.x),
             y: self.y.min(rhs.y),
@@ -267,6 +278,18 @@ impl<T> Add<Vector3<T>> for Point3<T> where T: Add<Output = T>{
     }
 }
 
+impl<T> Add<Point3<T>> for Point3<T> where T: Add<Output = T>{
+    type Output = Point3<T>;
+
+    fn add(self, rhs: Point3<T>) -> Self::Output {
+        Self {
+            x: self.x + rhs.x,
+            y: self.y + rhs.y,
+            z: self.z + rhs.z,
+        }
+    }
+}
+
 impl<T> Sub<Point3<T>> for Point3<T> where T: Sub<Output = T>{
     type Output = Vector3<T>;
 
@@ -291,14 +314,14 @@ impl<T> Sub<Vector3<T>> for Point3<T> where T: Sub<Output = T>{
     }
 }
 
-impl<T> Mul<f32> for Point3<T> where T: Mul<f32, Output = T>{
+impl<T> Mul<T> for Point3<T> where T: Mul<Output = T> + Copy{
     type Output = Point3<T>;
 
-    fn mul(self, rhs: f32) -> Self::Output {
+    fn mul(self, rhs: T) -> Self::Output {
         Self{
             x: self.x * rhs,
-            y: self.y * rhs,
-            z: self.z * rhs,
+            y: self.y * rhs.clone(),
+            z: self.z * rhs.clone(),
         }
     }
 }
@@ -378,8 +401,8 @@ mod tests {
     fn test_point3_min_max_with_point() {
         let a = Point3f::new(1.0, 5.0, 3.0);
         let b = Point3f::new(2.0, 3.0, 4.0);
-        let min = a.min(b);
-        let max = a.max(b);
+        let min = a.min(&b);
+        let max = a.max(&b);
         assert_eq!(min, Point3f::new(1.0, 3.0, 3.0));
         assert_eq!(max, Point3f::new(2.0, 5.0, 4.0));
     }
