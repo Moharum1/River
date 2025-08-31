@@ -4,6 +4,7 @@ mod Vector;
 mod Point;
 pub mod rays;
 mod BoundingBox;
+mod Transformations;
 
 use std::ops::{Add, Mul, Sub};
 use std::process::Output;

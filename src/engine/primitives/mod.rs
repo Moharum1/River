@@ -1,6 +1,14 @@
 use crate::engine::{Bound3f, SurfaceInteraction};
 use crate::engine::math::rays::Ray::Ray;
 
+pub(crate) trait Shape{
+    
+}
+
+
+
+
+
 pub(crate) trait Primitive{
 
     // Get the BoundingBox of the scene Geometry
