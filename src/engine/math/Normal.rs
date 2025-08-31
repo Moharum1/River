@@ -6,7 +6,7 @@ use crate::engine::math::Vector::Vector3;
 /** A normal is a Vector that is perpendicular to a surface at a certain position
 It can also be defined as the cross-product between tow no-parallel vector
 */
-#[derive(Debug, Clone, Copy, Default)]
+#[derive(Debug, Clone, Copy, Default,PartialEq)]
 pub struct Normal3<T>{
     pub x: T,
     pub y: T,
@@ -60,7 +60,7 @@ impl<T> Normal3<T> where T: Signed + Clone + Real{
         self.dot(rhs).abs()
     }
 
-    pub fn face_forward(&self, v : &Vector3<T>) -> Self{
+    pub fn face_forward(&self, v : &Normal3f) -> Self{
         if self.dot(&v) < T::zero(){
             self.neg()
         }else {

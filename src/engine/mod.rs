@@ -6,7 +6,7 @@ mod math;
 mod samplers;
 mod lights;
 mod primitives;
-
+mod Interactions;
 // Primitive Describe a Shape Geometry and it's Material
 
 struct SurfaceInteraction{

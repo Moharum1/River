@@ -6,9 +6,6 @@ pub(crate) trait Shape{
 }
 
 
-
-
-
 pub(crate) trait Primitive{
 
     // Get the BoundingBox of the scene Geometry

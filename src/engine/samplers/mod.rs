@@ -1,10 +1,10 @@
 use crate::engine::lights::GeneralLight;
-use crate::engine::math::Camera;
+use crate::engine::math::{Camera, Integrator};
 use crate::engine::math::rays::Ray::Ray;
 use crate::engine::primitives::GeneralPrimitive;
 use crate::engine::Scene;
 
-pub trait SamplerIntegrator : crate::engine::math::Integrator {
+pub trait SamplerIntegrator : Integrator {
     fn render(&self, scene: &Scene<GeneralPrimitive, GeneralLight>){
         // self.preprocess(scene);
         //

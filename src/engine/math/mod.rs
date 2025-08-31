@@ -1,10 +1,10 @@
 mod WhittedIntegrator;
-mod Normal;
-mod Vector;
-mod Point;
+pub(crate) mod Normal;
+pub(crate) mod Vector;
+pub(crate) mod Point;
 pub mod rays;
-mod BoundingBox;
-mod Transformations;
+mod bounding_box;
+mod transformations;
 
 use std::ops::{Add, Mul, Sub};
 use std::process::Output;

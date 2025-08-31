@@ -1,4 +1,4 @@
-use std::ops::{Index, Mul};
+use std::ops::{Index, IndexMut, Mul};
 use nalgebra::Matrix4;
 use crate::engine::math::Point::Point3f;
 use crate::engine::math::Vector::Vector3f;
@@ -204,6 +204,12 @@ impl Index<usize> for Matrix4x4{
     type Output = [f32;4];
 
     fn index(&self, index: usize) -> &Self::Output {
-        &self.0[index]
+        &self[index]
+    }
+}
+
+impl IndexMut<usize> for Matrix4x4{
+    fn index_mut(&mut self, index: usize) -> &mut Self::Output {
+        &mut self[index]
     }
 }
